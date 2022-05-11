@@ -1,0 +1,57 @@
+
+# BUILD LINKS
+EXE = AssetManager
+VCVARS = "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+# OPTIONS
+CFLAGS = /nologo /std:c++latest /EHsc /MDd /W3 /O2 /GL
+LFLAGS = /nologo /subsystem:console /machine:X64 /LTCG
+HEADER = /I.\ext\stb_image /I.\ext\tinyloader /I.\ext\lz4 /I.\ext\nlohmann
+MYLIBS = shell32.lib user32.lib
+
+# SETUP ENVIRONMENT
+BIN :
+	@if not exist ".\bin" mkdir .\bin
+	@if not exist ".\bin\obj" mkdir .\bin\obj
+	@if not exist ".\assets" mkdir .\assets
+
+.\bin\obj\lz4.obj : .\ext\lz4\lz4.c
+	@cmd.exe /c "$(VCVARS) && cl $(CFLAGS) /c /I.\ext\lz4 /Fo:.\bin\obj\ $?"
+	@xcopy /y .\bin\obj\$(**B).obj .\bin\objlib
+
+EXT : .\bin\obj\lz4.obj
+
+CONFIG : BIN EXT
+
+# BUILD LIBRARY
+OBJLIB : .\src\assetlib\*.cpp
+	@if not exist ".\bin\objlib" mkdir .\objlib
+	@cmd.exe /c "$(VCVARS) && cl $(CFLAGS) /c $(HEADER) /Fo:.\bin\objlib\ $?"
+
+LNKLIB : .\bin\objlib\*.obj
+	@cmd.exe /c "$(VCVARS) && lib shell32.lib $** $(LFLAGS) /out:.\bin\$(EXE).lib"
+
+BLDLIB : OBJLIB LNKLIB
+
+EXPORTPATH = .\bin\export\AssetManager
+EXPORTLIB : BLDLIB
+	@if not exist "$(EXPORTPATH)" mkdir $(EXPORTPATH)
+	@xcopy /y .\bin\$(EXE).lib $(EXPORTPATH)
+	@xcopy /y .\src\assetlib\*.h $(EXPORTPATH)\include
+
+# BUILD TOOL
+OBJEXE : .\src\*.cpp
+	@cmd.exe /c "$(VCVARS) && cl $(CFLAGS) /c /I.\src\assetlib $(HEADER) /Fo:.\bin\obj\ $?"
+
+LNKEXE : .\bin\obj\*.obj
+	@cmd.exe /c "$(VCVARS) && link $(MYLIBS) .\bin\AssetManager.lib $** $(LFLAGS) /out:.\bin\$(EXE).exe"
+
+BLDEXE : OBJEXE LNKEXE
+
+# UTILITY
+ALL : CONFIG BLDLIB BLDEXE
+
+RUN :
+	@.\bin\$(EXE).exe
+
+CLEAN : 
+	@del /Q /F /S .\bin\*

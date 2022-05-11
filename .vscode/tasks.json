@@ -1,0 +1,93 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+		{
+			"label": "build all",
+			"type": "shell",
+			"command": "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/nmake.exe\"",
+			"args": ["/nologo", "ALL"],
+			"problemMatcher": ["$msCompile"],
+			"options": {
+				"shell": {
+					"executable": "cmd.exe",
+					"args": ["/c"]
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
+			"label": "build quick",
+			"type": "shell",
+			"command": "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/nmake.exe\"",
+			"args": ["/nologo", "BLDEXE"],
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"options": {
+				"shell": {
+					"executable": "cmd.exe",
+					"args": ["/c"]
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "clean",
+			"type": "shell",
+			"command": "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/nmake.exe\"",
+			"args": ["/nologo", "CLEAN"],
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"options": {
+				"shell": {
+					"executable": "cmd.exe",
+					"args": ["/c"]
+				}
+			}
+		},
+		{
+			"label": "execute",
+			"type": "shell",
+			"command": "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/nmake.exe\"",
+			"args": ["/nologo", "RUN"],
+			"options": {
+				"shell": {
+					"executable": "C:/Users/lupin/AppData/Local/Microsoft/WindowsApps/wt.exe",
+					"args": [
+						"-p PowerShell",
+						"-d ${workspaceFolder}"
+					]
+				}
+			},
+			"group": "test"
+		},
+		{
+			"label": "configure",
+			"type": "shell",
+			"command": "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30037/bin/Hostx64/x64/nmake.exe\"",
+			"args": ["/nologo", "CONFIG"],
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"options": {
+				"shell": {
+					"executable": "cmd.exe",
+					"args": ["/c"]
+				}
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			}
+		},
+	]
+}
